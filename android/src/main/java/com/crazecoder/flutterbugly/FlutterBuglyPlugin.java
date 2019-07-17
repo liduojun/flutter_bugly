@@ -1,7 +1,12 @@
 package com.crazecoder.flutterbugly;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.crazecoder.flutterbugly.bean.BuglyInitResultInfo;
 import com.crazecoder.flutterbugly.callback.UpgradeCallback;
@@ -13,11 +18,13 @@ import com.tencent.bugly.beta.UpgradeInfo;
 import com.tencent.bugly.beta.upgrade.UpgradeListener;
 import com.tencent.bugly.crashreport.CrashReport;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import androidx.core.content.FileProvider;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -204,7 +211,7 @@ public class FlutterBuglyPlugin implements MethodCallHandler {
             }
             CrashReport.postCatchedException(throwable);
             result(null);
-        }else if (call.method.equals("installApk")) {
+        } else if (call.method.equals("installApk")) {
             String filePath = call.argument("path");
 
             Log.i("apk", "开始执行安装: " + this.activity.getFilesDir() + filePath);
@@ -243,13 +250,14 @@ public class FlutterBuglyPlugin implements MethodCallHandler {
             Log.w("apk", "到End了");
 
 //            result(null);
-        }
-        else {
+        } else {
             result.notImplemented();
             isResultSubmitted = true;
         }
 
     }
+
+
 
     private void result(Object object) {
         if (result != null && !isResultSubmitted) {
