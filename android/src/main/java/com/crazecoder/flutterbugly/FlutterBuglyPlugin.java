@@ -204,7 +204,47 @@ public class FlutterBuglyPlugin implements MethodCallHandler {
             }
             CrashReport.postCatchedException(throwable);
             result(null);
-        } else {
+        }else if (call.method.equals("installApk")) {
+            String filePath = call.argument("path");
+
+            Log.i("apk", "开始执行安装: " + this.activity.getFilesDir() + filePath);
+// 重新构造Uri：content://
+
+            File fPath = new File(this.activity.getFilesDir() , "");
+            File apkFile = new File(fPath , filePath);
+
+
+            Log.i("apk", "安装包是否存在: " + apkFile.exists());
+
+            if(!apkFile.exists()){
+                Log.i("apk", "安装包是空的");
+                result(null);
+                return;
+            }
+
+            Log.i("apk", "开始执行安装: " + apkFile);
+//            File apkFile = new File(this.activity.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), filePath);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Log.w("apk", "版本大于 N ，开始使用 fileProvider 进行安装");
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Uri contentUri = FileProvider.getUriForFile(
+                        this.activity
+                        , "cn.walkingpad.app.fileprovider"
+                        , apkFile);
+                intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+                Log.w("apk", "到这里了");
+            } else {
+                Log.w("apk", "正常进行安装");
+                intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
+            }
+            this.activity.startActivity(intent);
+            Log.w("apk", "到End了");
+
+//            result(null);
+        }
+        else {
             result.notImplemented();
             isResultSubmitted = true;
         }

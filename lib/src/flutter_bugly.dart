@@ -158,4 +158,13 @@ class FlutterBugly {
     return info;
   }
 
+  ///安装apk
+  static Future<Null> installApk(String filePath) async {
+    Map<String, Object> map = {
+      "path": filePath,
+    };
+    await _channel.invokeMethod('installApk', map);
+  }
+
+
 }
