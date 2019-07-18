@@ -60,6 +60,7 @@ public class FlutterBuglyPlugin implements MethodCallHandler {
         isResultSubmitted = false;
         this.result = result;
         if (call.method.equals("initBugly")) {
+            Beta.strToastCheckingUpgrade  = "";
             if (call.hasArgument("appId")) {
                 if (call.hasArgument("autoInit")) {
                     Beta.autoInit = false;
