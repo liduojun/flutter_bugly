@@ -62,6 +62,8 @@ public class FlutterBuglyPlugin implements MethodCallHandler {
         if (call.method.equals("initBugly")) {
             Beta.strToastCheckingUpgrade  = "";
             Beta.strToastCheckUpgradeError   = "";
+            Beta.strToastYourAreTheLatestVersion = "";
+
             if (call.hasArgument("appId")) {
                 if (call.hasArgument("autoInit")) {
                     Beta.autoInit = false;
