@@ -242,7 +242,7 @@ public class FlutterBuglyPlugin implements MethodCallHandler {
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 Uri contentUri = FileProvider.getUriForFile(
                         this.activity
-                        , "cn.walkingpad.app.fileprovider"
+                        , this.activity.getPackageName() + ".fileprovider"
                         , apkFile);
                 intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
                 Log.w("apk", "到这里了");
